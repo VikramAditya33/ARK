@@ -66,7 +66,7 @@ flowchart LR
 The first complete demonstration protects one workflow: preparing a customer
 renewal.
 
-Two independent source applications will hold the CRM and operational records.
+Two independent source applications hold the CRM and operational records.
 ARK will capture the customer, deal, owner, contract, attachments, and open
 issues through authorized boundaries. Both source applications will then be
 forced offline.
@@ -152,6 +152,34 @@ pnpm check
 pnpm test:e2e
 ```
 
+Run the controlled source applications:
+
+```bash
+pnpm dev:sources
+```
+
+The CRM listens on port `3201`; the contracts and issues source listens on port
+`3202`. They use separate SQLite databases under `.ark/`, fictional data, and
+local bearer tokens defined in `.env.example`. Neither source shares ARK's
+PostgreSQL database or runtime.
+
+Open [the CRM login](http://127.0.0.1:3201/login) with
+`DEMO_CRM_USER_TOKEN`, or [the Ops login](http://127.0.0.1:3202/login) with
+`DEMO_OPS_USER_TOKEN`. The default local values are `demo-crm-user` and
+`demo-ops-user`. The terminal remains attached because both servers run in
+watch mode; press `Ctrl+C` to stop them.
+
+Run the real browser workflow across both sources:
+
+```bash
+pnpm exec playwright install chromium
+pnpm test:browser
+```
+
+The browser test finds the Acme renewal and account owner in the CRM, verifies
+the governing contract checksum, confirms the three unresolved high-severity
+issues, and proves that both source domains can fail independently.
+
 Run PostgreSQL integration tests:
 
 ```bash
@@ -185,12 +213,15 @@ docker compose \
 apps/
   api/       Control-plane API
   cli/       Operator commands
+  demo-crm/  Controlled CRM source and deliberately partial export
+  demo-ops/  Controlled contracts, attachments, and issues source
   web/       Control-plane web application
   worker/    Capture, build, and drill workers
 
 packages/
   config/    Validated server configuration
   db/        Drizzle schema, migrations, and tenant repositories
+  demo-source-kit/ Shared authentication, pagination, and outage controls
   domain/    Identifiers, state machines, provenance, events, and policy
   testkit/   Shared fixtures and live Solari checks
 
