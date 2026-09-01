@@ -1,0 +1,14 @@
+.ark/
+.private/
+.turbo/
+artifacts/
+coverage/
+dist/
+examples/
+node_modules/
+recordings/
+reports/
+screenshots/
+.env
+LICENSE
+README.md

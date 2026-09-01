@@ -6,3 +6,13 @@ __pycache__/
 .venv/
 venv/
 screenshot.png
+/.private/
+dist/
+coverage/
+.turbo/
+*.tsbuildinfo
+/artifacts/
+/recordings/
+/screenshots/
+/reports/
+/.ark/

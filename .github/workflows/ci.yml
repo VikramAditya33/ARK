@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: "true"
+      DATABASE_URL: postgresql://ark:ark-ci-postgres@127.0.0.1:54329/ark
+      POSTGRES_DB: ark
+      POSTGRES_PASSWORD: ark-ci-postgres
+      POSTGRES_PORT: "54329"
+      POSTGRES_USER: ark
+      REDIS_PORT: "63799"
+      MINIO_ROOT_USER: ark-ci
+      MINIO_ROOT_PASSWORD: ark-ci-minio-password
+      MINIO_API_PORT: "9009"
+      MINIO_CONSOLE_PORT: "9010"
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm test:e2e
+      - run: pnpm secrets:check
+      - run: pnpm audit --audit-level high
+
+      - name: Start local infrastructure
+        run: docker compose -f infra/compose/docker-compose.yml up -d --wait
+
+      - run: node tools/check-infra.mjs
+      - run: pnpm db:migrate
+      - run: pnpm test:integration
+
+      - name: Stop local infrastructure
+        if: always()
+        run: docker compose -f infra/compose/docker-compose.yml down --volumes
