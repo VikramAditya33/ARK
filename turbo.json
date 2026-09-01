@@ -4,6 +4,16 @@
   "globalEnv": [
     "ANTHROPIC_API_KEY",
     "DATABASE_URL",
+    "DEMO_CRM_ADMIN_TOKEN",
+    "DEMO_CRM_DATABASE_PATH",
+    "DEMO_CRM_HOST",
+    "DEMO_CRM_PORT",
+    "DEMO_CRM_USER_TOKEN",
+    "DEMO_OPS_ADMIN_TOKEN",
+    "DEMO_OPS_DATABASE_PATH",
+    "DEMO_OPS_HOST",
+    "DEMO_OPS_PORT",
+    "DEMO_OPS_USER_TOKEN",
     "ENCRYPTION_MASTER_KEY_REF",
     "NODE_ENV",
     "OBJECT_STORE_ACCESS_KEY_ID",
@@ -26,6 +36,7 @@
       "outputs": ["dist/**"]
     },
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
