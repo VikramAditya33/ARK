@@ -1,0 +1,29 @@
+name: Live Solari smoke test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  live-solari:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SOLARI_API_KEY: ${{ secrets.SOLARI_API_KEY }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          run_install: false
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:live-solari

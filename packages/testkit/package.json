@@ -1,0 +1,17 @@
+{
+  "name": "@ark/testkit",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts --passWithNoTests",
+    "test:live-solari": "vitest run --config vitest.live.config.ts",
+    "typecheck": "tsc --project tsconfig.json"
+  },
+  "dependencies": {
+    "@solarisdk/sdk": "0.1.2",
+    "dotenv": "17.4.2"
+  }
+}
