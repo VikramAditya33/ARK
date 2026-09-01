@@ -11,6 +11,10 @@
     "./security": {
       "types": "./dist/security/index.d.ts",
       "import": "./dist/security/index.js"
+    },
+    "./state-machines": {
+      "types": "./dist/state-machines/index.d.ts",
+      "import": "./dist/state-machines/index.js"
     }
   },
   "scripts": {

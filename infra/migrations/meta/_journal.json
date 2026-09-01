@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1788267588877,
+      "tag": "0001_domain_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1788267874719,
+      "tag": "0002_provenance_raw_links",
+      "breakpoints": true
+    }
+  ]
+}
